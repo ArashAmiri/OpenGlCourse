@@ -32,6 +32,8 @@ float curSize = .4f;
 const float maxSize = .8f;
 const float minSize = .1f;
 
+//test comment
+
 // Vertex Shader
 static const char* vShader = "								\n\
 #version 330												\n\

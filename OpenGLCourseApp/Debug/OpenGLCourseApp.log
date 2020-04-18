@@ -1,3 +1,0 @@
-﻿  OpenGLCourseApp.cpp
-LINK : warning LNK4098: Standardbibliothek "MSVCRT" steht in Konflikt mit anderen Bibliotheken; /NODEFAULTLIB:Bibliothek verwenden.
-  OpenGLCourseApp.vcxproj -> C:\Users\Arashbella\source\repos\OpenGLCourseApp\Debug\OpenGLCourseApp.exe
