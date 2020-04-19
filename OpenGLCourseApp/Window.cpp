@@ -4,12 +4,24 @@ Window::Window()
 {
 	width = 800;
 	height = 600;
+
+	xChange = 0;
+	yChange = 0;
+
+	for (size_t i = 0; i < 1024; ++i) keys[i] = 0;
+
 }
 
 Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
+
+	xChange = 0;
+	yChange = 0;
+
+	for (size_t i = 0; i < 1024; ++i) keys[i] = 0;
+
 }
 
 int Window::initialize()
@@ -41,6 +53,9 @@ int Window::initialize()
 	// Set the context for GLEW to use
 	glfwMakeContextCurrent(mainWindow);
 
+	createCallbacks();
+	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	//Allow modern extension features
 	glewExperimental = GL_TRUE;
 
@@ -57,10 +72,76 @@ int Window::initialize()
 	//setup viewport size
 	glViewport(0, 0, bufferWidth, bufferHeight);
 
+	glfwSetWindowUserPointer(mainWindow, this);
+
+}
+
+GLfloat Window::getXChange()
+{
+	GLfloat theChange = xChange;
+	xChange = 0;
+	return theChange;
+}
+
+
+GLfloat Window::getYChange()
+{
+	GLfloat theChange = yChange;
+	yChange = 0;
+	return theChange;
 }
 
 Window::~Window()
 {
 	glfwDestroyWindow(mainWindow);
 	glfwTerminate();
+}
+
+
+
+void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
+{
+	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	if (key >= 0 && key < 1024)
+	{
+		if (action == GLFW_PRESS)
+		{
+			theWindow->keys[key] = true;
+		}
+
+		if (action == GLFW_RELEASE)
+		{
+			theWindow->keys[key] = false;
+		}
+	}
+
+}
+
+void Window::createCallbacks()
+{
+	glfwSetKeyCallback(mainWindow, handleKeys);
+	glfwSetCursorPosCallback(mainWindow, handleMouse);
+}
+
+void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
+{
+	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (theWindow->mouseFirstMoved)
+	{
+		theWindow->mouseFirstMoved = false;
+		theWindow->lastX = xPos;
+		theWindow->lastY = yPos;
+	}
+	theWindow->xChange = xPos - theWindow->lastX;
+	theWindow->yChange = theWindow->lastY - yPos;
+
+	theWindow->lastX = xPos;
+	theWindow->lastY = yPos;
+
 }
