@@ -1,12 +1,15 @@
 #pragma once
 
-#include <GL/glew.h>
+typedef unsigned int GLuint;
+typedef int GLint;
+typedef int GLsizei;
+typedef float GLfloat;
 
-class Mesh
+class AMesh
 {
 public:
-	Mesh();
-	~Mesh();
+	AMesh();
+	~AMesh();
 
 	void CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices);
 	void RenderMesh();

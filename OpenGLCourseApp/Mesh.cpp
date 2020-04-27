@@ -1,6 +1,7 @@
 #include "Mesh.h"
+#include <GL/glew.h>
 
-Mesh::Mesh()
+AMesh::AMesh()
 {
 	VBO = 0;
 	VAO = 0;
@@ -8,12 +9,12 @@ Mesh::Mesh()
 	indexCount = 0;
 }
 
-Mesh::~Mesh()
+AMesh::~AMesh()
 {
 	ClearMesh();
 }
 
-void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices)
+void AMesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices)
 {
 	indexCount = numOfIndices;
 
@@ -28,8 +29,12 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int num
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numOfVertices, vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
 	glEnableVertexAttribArray(0);	
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void *)(sizeof(vertices[0]) * 3));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void *)(sizeof(vertices[0]) * 5));
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -38,7 +43,7 @@ void Mesh::CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int num
 
 }
 
-void Mesh::RenderMesh()
+void AMesh::RenderMesh()
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -47,7 +52,7 @@ void Mesh::RenderMesh()
 	glBindVertexArray(0);
 }
 
-void Mesh::ClearMesh()
+void AMesh::ClearMesh()
 {
 	
 	if (IBO != 0)

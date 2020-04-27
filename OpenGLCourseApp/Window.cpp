@@ -76,7 +76,7 @@ int Window::initialize()
 
 }
 
-GLfloat Window::getXChange()
+GLfloat Window::GetXChange()
 {
 	GLfloat theChange = xChange;
 	xChange = 0;
@@ -84,7 +84,7 @@ GLfloat Window::getXChange()
 }
 
 
-GLfloat Window::getYChange()
+GLfloat Window::GetYChange()
 {
 	GLfloat theChange = yChange;
 	yChange = 0;

@@ -1,10 +1,15 @@
 #include "Camera.h"
 
-Camera::Camera()
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
+
+ACamera::ACamera()
 {
 }
 
-Camera::Camera(
+ACamera::ACamera(
 	glm::vec3 startPosition, 
 	glm::vec3 startUp, 
 	GLfloat startYaw, 
@@ -12,67 +17,67 @@ Camera::Camera(
 	GLfloat startMoveSpeed, 
 	GLfloat startTurnSpeed)
 {
-	position = startPosition;
-	worldUp = startUp;
-	yaw = startYaw;
-	pitch = startPitch;
-	front = glm::vec3(0.f, 0.f, -1.f);
+	Position = startPosition;
+	WorldUp = startUp;
+	Yaw = startYaw;
+	Pitch = startPitch;
+	Front = glm::vec3(0.f, 0.f, -1.f);
 
-	movementSpeed = startMoveSpeed;
-	turnSpeed = startTurnSpeed;
+	MovementSpeed = startMoveSpeed;
+	TurnSpeed = startTurnSpeed;
 
-	update();
+	Update();
 
 }
 
-void Camera::keyControl(bool* keys, GLfloat DeltaTime)
+void ACamera::KeyControl(bool* keys, GLfloat DeltaTime)
 {
-	if (keys[GLFW_KEY_W]) position += front * movementSpeed * DeltaTime;
-	if (keys[GLFW_KEY_S]) position -= front * movementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_W]) Position += Front * MovementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_S]) Position -= Front * MovementSpeed * DeltaTime;
 
-	if (keys[GLFW_KEY_D]) position += right * movementSpeed * DeltaTime;
-	if (keys[GLFW_KEY_A]) position -= right * movementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_D]) Position += Right * MovementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_A]) Position -= Right * MovementSpeed * DeltaTime;
 
-	if (keys[GLFW_KEY_Q]) position += up * movementSpeed * DeltaTime;
-	if (keys[GLFW_KEY_E]) position -= up * movementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_Q]) Position += Up * MovementSpeed * DeltaTime;
+	if (keys[GLFW_KEY_E]) Position -= Up * MovementSpeed * DeltaTime;
 }
 
-void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
+void ACamera::MouseControl(GLfloat xChange, GLfloat yChange)
 {
-	xChange *= turnSpeed;
-	yChange *= turnSpeed;
+	xChange *= TurnSpeed;
+	yChange *= TurnSpeed;
 
-	yaw += xChange;
-	pitch += yChange;
+	Yaw += xChange;
+	Pitch += yChange;
 
-	if (pitch > 89.f) pitch = 89.f;
-	if (pitch < -89.f) pitch = -89.f;
+	if (Pitch > 89.f) Pitch = 89.f;
+	if (Pitch < -89.f) Pitch = -89.f;
 
-	update();
+	Update();
 }
 
-glm::mat4 Camera::CalculateViewMatrix()
+glm::mat4 ACamera::CalculateViewMatrix()
 {
-	return glm::lookAt(position, position + front, up);
+	return glm::lookAt(Position, Position + Front, Up);
 
 }
 
 
 
-Camera::~Camera()
+ACamera::~ACamera()
 {
 	
 }
 
-void Camera::update()
+void ACamera::Update()
 {
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front = glm::normalize(front);
+	Front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+	Front.y = sin(glm::radians(Pitch));
+	Front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+	Front = glm::normalize(Front);
 
-	right = glm::normalize(glm::cross(front, worldUp));
-	up = glm::normalize(glm::cross(right, front));
+	Right = glm::normalize(glm::cross(Front, WorldUp));
+	Up = glm::normalize(glm::cross(Right, Front));
 }
 
 

@@ -159,16 +159,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="OpenGLCourseApp.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OpenGLCourseApp.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

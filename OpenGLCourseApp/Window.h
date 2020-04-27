@@ -18,11 +18,11 @@ public:
 
 	inline bool getShouldClose() { return mainWindow && glfwWindowShouldClose(mainWindow);  }
 
-	inline bool* getKeys() { return keys; }
+	inline bool* GetKeys() { return keys; }
 
-	GLfloat getXChange();
+	GLfloat GetXChange();
 
-	GLfloat getYChange();
+	GLfloat GetYChange();
 
 	inline void swapBuffers() { 
 		if (mainWindow)

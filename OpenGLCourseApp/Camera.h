@@ -1,42 +1,50 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <GLFW/glfw3.h>
 
-class Camera
+typedef unsigned int GLuint;
+typedef int GLint;
+typedef int GLsizei;
+typedef float GLfloat;
+
+
+class ACamera
 {
 
 public:
 
-	Camera();
+	ACamera();
 
-	Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed);
+	ACamera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed);
 	
-	void keyControl(bool* keys, GLfloat DeltaTime);
-	void mouseControl(GLfloat xChange, GLfloat yChange);
+	inline glm::vec3 GetPosition() { return Position; }
+	inline glm::vec3 GetFront() { return Front; }
+	inline glm::vec3 GetRight() { return Right; }
+	inline glm::vec3 GetUp() { return Up; }
+	
+	void KeyControl(bool* keys, GLfloat DeltaTime);
+	void MouseControl(GLfloat xChange, GLfloat yChange);
 	
 	glm::mat4 CalculateViewMatrix();
 
-	~Camera();
+	~ACamera();
 
 
 
 private:
-	glm::vec3 position;
-	glm::vec3 front;
-	glm::vec3 up;
-	glm::vec3 right;
-	glm::vec3 worldUp;
+	glm::vec3 Position;
+	glm::vec3 Front;
+	glm::vec3 Up;
+	glm::vec3 Right;
+	glm::vec3 WorldUp;
 
-	GLfloat yaw;
-	GLfloat pitch;
+	GLfloat Yaw;
+	GLfloat Pitch;
 
-	GLfloat movementSpeed;
-	GLfloat turnSpeed;
+	GLfloat MovementSpeed;
+	GLfloat TurnSpeed;
 
-	void update();
+	void Update();
 
 
 
