@@ -32,6 +32,7 @@ ACamera::ACamera(
 
 void ACamera::KeyControl(bool* keys, GLfloat DeltaTime)
 {
+	/*
 	if (keys[GLFW_KEY_W]) Position += Front * MovementSpeed * DeltaTime;
 	if (keys[GLFW_KEY_S]) Position -= Front * MovementSpeed * DeltaTime;
 
@@ -40,6 +41,7 @@ void ACamera::KeyControl(bool* keys, GLfloat DeltaTime)
 
 	if (keys[GLFW_KEY_Q]) Position += Up * MovementSpeed * DeltaTime;
 	if (keys[GLFW_KEY_E]) Position -= Up * MovementSpeed * DeltaTime;
+	*/	
 }
 
 void ACamera::MouseControl(GLfloat xChange, GLfloat yChange)

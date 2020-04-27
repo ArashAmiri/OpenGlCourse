@@ -14,7 +14,6 @@ class APawn : AActor
 
 public:
 
-	virtual void HandleUserInput(bool* keys, float DeltaTime) override;
 	
 };
 

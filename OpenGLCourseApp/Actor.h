@@ -19,10 +19,11 @@ public:
 
 	AActor(AMesh* Mesh, ATexture* Texture, AMaterial* Material, FTransform Transform, FShaderProgram* ShaderProgram);
 
-	inline virtual void HandleUserInput(bool* keys, float DeltaTime) {};
 	inline void SetMesh(AMesh* MeshToSet) { Mesh = MeshToSet; }
 	inline AMesh* GetMesh() { return Mesh; }
-	
+	inline FTransform GetTransform() { return this->Transform; }
+	inline void SetTransform(FTransform TransformToSet) { this->Transform = Transform; }
+
 	void Update();
 
 };

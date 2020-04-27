@@ -22,11 +22,15 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Pawn.h"
+#include "PlayerController.h"
 
 #include "OpenGLCourseApp.h"
 
 std::vector<AMesh*> MeshList;
 std::vector<FShaderProgram*> ShaderProgramList;
+std::vector<AActor*> Actors;
+
+APlayerController* PlayerController;
 
 Window MainWindow = Window(1366, 768);
 
@@ -148,8 +152,17 @@ int main()
 	FTransform T2 = FTransform();
 	T2.Location = FVector(3.f, 3.f, 3.f);
 
-	AActor Actor1 = AActor(MeshList[0], &DirtTexture, &DullMaterial, T1, ShaderProgramList[0]);
-	AActor Actor2 = AActor(MeshList[1], &BrickTexture, &ShinyMaterial, T2, ShaderProgramList[0]);
+	FTransform T3 = FTransform();
+	T3.Location = FVector(6.f, 3.f, 3.f);
+
+	AActor* Player = &AActor(MeshList[0], &DirtTexture, &DullMaterial, T1, ShaderProgramList[0]);
+
+	Actors.push_back(&AActor(MeshList[0], &DirtTexture, &DullMaterial, T1, ShaderProgramList[0]));
+	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, T2, ShaderProgramList[0]));
+	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, T3, ShaderProgramList[0]));
+
+	PlayerController = &APlayerController();
+	PlayerController->SetControlledActor(Player);
 
 	MainLight = Light(1.f, 1.0f, 1.0f, 0.2f, 
 		2.0f, -1.f, -2.f, 0.3f);
@@ -203,8 +216,13 @@ int main()
 
 		//Transform.Location = Camera.GetFront() + Camera.GetPosition();
 		
-		Actor1.Update();
-		Actor2.Update();
+		PlayerController->HandleUserInput(MainWindow.GetKeys(), DeltaTime);
+		
+		for (AActor* Actor : Actors)
+		{
+			Actor->Update();
+		}
+
 
 		glUseProgram(0);
 

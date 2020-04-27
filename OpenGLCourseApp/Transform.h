@@ -16,11 +16,19 @@ struct FVector
 		Z = ZToSet;
 	}
 
-	void operator+(FVector Other)
+	void operator=(FVector Other)
+	{
+		X = Other.X;
+		Y = Other.Y;
+		Z = Other.Z;
+	}
+
+	FVector operator+(FVector Other)
 	{
 		X += Other.X;
 		Y += Other.Y;
 		Z += Other.Z;
+		return FVector(X, Y, Z);
 	}
 
 	void operator+=(FVector Other)
@@ -30,6 +38,12 @@ struct FVector
 		Z += Other.Z;
 	}
 
+	void operator*(float Other)
+	{
+		X *= Other;
+		Y *= Other;
+		Z *= Other;
+	}
 
 	void operator-(FVector Other)
 	{
