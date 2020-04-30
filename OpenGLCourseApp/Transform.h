@@ -4,7 +4,7 @@ struct FVector
 {
 	float X, Y, Z = 0;
 
-	FVector(float XYZ)
+	FVector(const float &XYZ)
 	{
 		X = Y = Z = XYZ;
 	}
@@ -16,14 +16,14 @@ struct FVector
 		Z = ZToSet;
 	}
 
-	void operator=(FVector Other)
+	void operator=(const FVector &Other)
 	{
 		X = Other.X;
 		Y = Other.Y;
 		Z = Other.Z;
 	}
 
-	FVector operator+(FVector Other)
+	FVector operator+(const FVector &Other)
 	{
 		X += Other.X;
 		Y += Other.Y;
@@ -31,28 +31,28 @@ struct FVector
 		return FVector(X, Y, Z);
 	}
 
-	void operator+=(FVector Other)
+	void operator+=(const FVector &Other)
 	{
 		X += Other.X;
 		Y += Other.Y;
 		Z += Other.Z;
 	}
 
-	void operator*(float Other)
+	void operator*(const float &Other)
 	{
 		X *= Other;
 		Y *= Other;
 		Z *= Other;
 	}
 
-	void operator-(FVector Other)
+	void operator-(const FVector &Other)
 	{
 		X -= Other.X;
 		Y -= Other.Y;
 		Z -= Other.Z;
 	}
 
-	void operator-=(FVector Other)
+	void operator-=(const FVector &Other)
 	{
 		X -= Other.X;
 		Y -= Other.Y;
@@ -69,7 +69,14 @@ public:
 	FVector Location = FVector(1.0f);
 	FVector Scale = FVector(1.0f);
 
-	inline FVector GetLocation() { return Location; }
+	inline FTransform AddToLocation(FVector Other) { 
+		Location += Other; 
+		FTransform RetTransform = FTransform(); 
+		RetTransform.Location = Location; 
+		return RetTransform;
+	}
+
+	inline FVector* GetLocation() { return &Location; }
 	inline FVector GetScale() { return Scale; }
 };
 

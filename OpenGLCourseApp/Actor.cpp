@@ -14,13 +14,13 @@ AActor::AActor(
 	AMesh* MeshToSet, 
 	ATexture* TextureToSet, 
 	AMaterial* MaterialToSet, 
-	FTransform TransformToSet, 
+	glm::vec3 PositionToSet, 
 	FShaderProgram* ShaderProgramToSet) 
 	: 
 	Mesh(MeshToSet), 
 	Texture(TextureToSet), 
 	Material(MaterialToSet), 
-	Transform(TransformToSet), 
+	Position(PositionToSet), 
 	ShaderProgram(ShaderProgramToSet) {}
 
 void AActor::Update()
@@ -31,8 +31,7 @@ void AActor::Update()
 	GLuint uniformShininess = ShaderProgram->GetShininessLocation();
 
 	glm::mat4 model(1);
-	FVector Location = Transform.GetLocation();
-	model = glm::translate(model, glm::vec3(Location.X, Location.Y, Location.Z));
+	model = glm::translate(model, Position);
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 	Texture->UseTexture();

@@ -6,8 +6,6 @@
 #include <cmath>
 #include <vector>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,6 +23,8 @@
 #include "PlayerController.h"
 
 #include "OpenGLCourseApp.h"
+
+#include "GraphicsLayer.h"	
 
 std::vector<AMesh*> MeshList;
 std::vector<FShaderProgram*> ShaderProgramList;
@@ -94,6 +94,8 @@ void calcAverageNormals(
 
 }
 
+APlayerController* GetGlobalPlayerController() { return PlayerController; }
+
 void CreateObjects()
 {
 	unsigned int indices[] = {
@@ -146,23 +148,20 @@ int main()
 	ShinyMaterial = AMaterial(1.0f, 32.f);
 	DullMaterial = AMaterial(0.3f, 4.f);
 
-	FTransform T1 = FTransform();
-	T1.Location = FVector(0.f, 3.f, 3.f);
+	glm::vec3 Loc1 = { 0.f, 3.f, 3.f };
 
-	FTransform T2 = FTransform();
-	T2.Location = FVector(3.f, 3.f, 3.f);
+	glm::vec3 Loc2 = { 3.f, 3.f, 3.f };
 
-	FTransform T3 = FTransform();
-	T3.Location = FVector(6.f, 3.f, 3.f);
+	glm::vec3 Loc3 = { 6.f, 3.f, 3.f };
 
-	AActor* Player = &AActor(MeshList[0], &DirtTexture, &DullMaterial, T1, ShaderProgramList[0]);
+	AActor* Player = &AActor(MeshList[0], &DirtTexture, &DullMaterial, Loc1, ShaderProgramList[0]);
 
-	Actors.push_back(&AActor(MeshList[0], &DirtTexture, &DullMaterial, T1, ShaderProgramList[0]));
-	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, T2, ShaderProgramList[0]));
-	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, T3, ShaderProgramList[0]));
+	Actors.push_back(Player);
+	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, Loc2, ShaderProgramList[0]));
+	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, Loc3, ShaderProgramList[0]));
 
 	PlayerController = &APlayerController();
-	PlayerController->SetControlledActor(Player);
+	PlayerController->SetControlledActor(*Player);
 
 	MainLight = Light(1.f, 1.0f, 1.0f, 0.2f, 
 		2.0f, -1.f, -2.f, 0.3f);
@@ -192,11 +191,12 @@ int main()
 		Camera.KeyControl(MainWindow.GetKeys(), DeltaTime);
 		Camera.MouseControl(MainWindow.GetXChange(), MainWindow.GetYChange());
 
-		//Clear window
-		glClearColor(0.2f, 0.2f, 0.2f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//Camera.SetPosition(Player->GetPosition() + glm::vec3(-4.0f, 0.f, 0.f));
+
+		GraphicsLayer::ClearScreen(glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
 
 		ShaderProgramList[0]->UseShader();
+
 		uniformModel = ShaderProgramList[0]->GetModelLocation();
 		uniformProjection = ShaderProgramList[0]->GetProjectionLocation();
 		uniformView = ShaderProgramList[0]->GetViewLocation();
@@ -210,21 +210,22 @@ int main()
 		
 		MainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffuseIntensity, uniformDirection);
 
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(Camera.CalculateViewMatrix()));
-		glUniform3f(uniformEyePosition, Camera.GetPosition().x, Camera.GetPosition().y, Camera.GetPosition().z);
+		GraphicsLayer::PassUniforms(uniformProjection, uniformView, uniformEyePosition, projection, Camera);
 
 		//Transform.Location = Camera.GetFront() + Camera.GetPosition();
 		
-		PlayerController->HandleUserInput(MainWindow.GetKeys(), DeltaTime);
 		
+
 		for (AActor* Actor : Actors)
 		{
 			Actor->Update();
 		}
 
+		PlayerController->HandleUserInput(MainWindow.GetKeys(), DeltaTime, Camera);
 
-		glUseProgram(0);
+		//Camera.SetPosition(PlayerController->GetControlledActor()->GetPosition() - glm::vec3(6.0f, 0.0f, 0.0f));
+		
+		GraphicsLayer::UseShaderProgram(0);
 
 		MainWindow.swapBuffers();
 	}

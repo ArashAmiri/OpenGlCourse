@@ -5,27 +5,29 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
+#include "PlayerController.h"
+#include "OpenGLCourseApp.h"
+#include "Actor.h"
+
 ACamera::ACamera()
 {
 }
 
 ACamera::ACamera(
-	glm::vec3 startPosition, 
-	glm::vec3 startUp, 
-	GLfloat startYaw, 
-	GLfloat startPitch, 
-	GLfloat startMoveSpeed, 
+	glm::vec3 startPosition,
+	glm::vec3 startUp,
+	GLfloat startYaw,
+	GLfloat startPitch,
+	GLfloat startMoveSpeed,
 	GLfloat startTurnSpeed)
+	: Position(startPosition)
+	, WorldUp(startUp)
+	, Yaw(startYaw)
+	, Pitch(startPitch)
+	, MovementSpeed(startMoveSpeed)
+	, TurnSpeed(startTurnSpeed)
 {
-	Position = startPosition;
-	WorldUp = startUp;
-	Yaw = startYaw;
-	Pitch = startPitch;
 	Front = glm::vec3(0.f, 0.f, -1.f);
-
-	MovementSpeed = startMoveSpeed;
-	TurnSpeed = startTurnSpeed;
-
 	Update();
 
 }
@@ -58,17 +60,15 @@ void ACamera::MouseControl(GLfloat xChange, GLfloat yChange)
 	Update();
 }
 
-glm::mat4 ACamera::CalculateViewMatrix()
+glm::mat4 ACamera::CalculateViewMatrix() const
 {
 	return glm::lookAt(Position, Position + Front, Up);
-
 }
 
 
 
 ACamera::~ACamera()
 {
-	
 }
 
 void ACamera::Update()
@@ -80,6 +80,16 @@ void ACamera::Update()
 
 	Right = glm::normalize(glm::cross(Front, WorldUp));
 	Up = glm::normalize(glm::cross(Right, Front));
+
+	APlayerController* GlobalPlayerController = GetGlobalPlayerController();
+	if (GlobalPlayerController)
+	{
+		auto Player = GlobalPlayerController->GetControlledActor();
+		if (Player)
+		{
+			//Player->UpdatePosition(Position + (Front * 4.f));
+		}
+	}
 }
 
 

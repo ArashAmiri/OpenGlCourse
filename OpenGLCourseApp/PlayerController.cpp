@@ -5,20 +5,20 @@
 #include <GLFW/glfw3.h>
 
 #include "Actor.h"
+#include "Camera.h"
 
-void APlayerController::HandleUserInput(bool* keys, float DeltaTime)
+void APlayerController::HandleUserInput(bool* keys, float DeltaTime, const ACamera& Camera)
 {
-	FVector ActorLocation = ControlledActor->GetTransform().GetLocation();
 
-	if (keys[GLFW_KEY_W])
-	{
-		FTransform Transform = ControlledActor->GetTransform();
-		Transform.Location = ActorLocation + FVector(3.0, 0.f, 0.f);
-		ControlledActor->SetTransform(Transform);
-	}
-	/*
-	if (keys[GLFW_KEY_S]) ActorLocation = &(*(ActorLocation) + FVector(0, 1.f * DeltaTime, 0.f));
-	if (keys[GLFW_KEY_W]) ActorLocation = &(*(ActorLocation) + FVector(-1.0 * DeltaTime, 0.f, 0.f));
-	if (keys[GLFW_KEY_S]) ActorLocation = &(*(ActorLocation) + FVector(0, -1.f * DeltaTime, 0.f));
-	*/
+	glm::vec3 UpdateFactor = glm::vec3(0.f);
+
+	if (keys[GLFW_KEY_W]) UpdateFactor = Camera.GetFront();
+	if (keys[GLFW_KEY_S]) UpdateFactor = -Camera.GetFront();
+	if (keys[GLFW_KEY_D]) UpdateFactor = Camera.GetRight();
+	if (keys[GLFW_KEY_A]) UpdateFactor = -Camera.GetRight();
+	if (keys[GLFW_KEY_Q]) UpdateFactor = Camera.GetUp();
+	if (keys[GLFW_KEY_E]) UpdateFactor = -Camera.GetUp();
+
+	ControlledActor->UpdatePosition(ControlledActor->GetPosition() + (UpdateFactor * DeltaTime));
+
 }
