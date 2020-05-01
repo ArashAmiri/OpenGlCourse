@@ -14,9 +14,20 @@ protected:
 	class FShaderProgram* ShaderProgram;
 
 	glm::vec3 Position;
+
+	float RotationFactor = 0.0f;
+
+	glm::vec3 Rotation = glm::vec3(0.0f);
+
 	float Speed = 0;
 
+	bool bIsRotating = true;
+
+	glm::vec3 RotationVector = glm::vec3(0.0f);
+
 public:
+
+	AActor();
 
 	AActor(AMesh* Mesh, ATexture* Texture, AMaterial* Material, glm::vec3 Position, FShaderProgram* ShaderProgram);
 
@@ -27,7 +38,10 @@ public:
 
 	inline glm::vec3 GetPosition() const { return Position; };
 
-	void Update();
+	void Update(float DeltaTime);
 
+	void Rotate(glm::vec3 Rotation);
+
+	inline void SetIsRotating(bool IsRotating) { bIsRotating = IsRotating; }
 };
 

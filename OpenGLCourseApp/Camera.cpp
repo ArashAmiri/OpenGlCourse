@@ -81,13 +81,14 @@ void ACamera::Update()
 	Right = glm::normalize(glm::cross(Front, WorldUp));
 	Up = glm::normalize(glm::cross(Right, Front));
 
+
 	APlayerController* GlobalPlayerController = GetGlobalPlayerController();
 	if (GlobalPlayerController)
 	{
 		auto Player = GlobalPlayerController->GetControlledActor();
 		if (Player)
 		{
-			//Player->UpdatePosition(Position + (Front * 4.f));
+			Position = Player->GetPosition() - (Front * 6.f);
 		}
 	}
 }

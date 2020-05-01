@@ -10,6 +10,10 @@
 #include "Material.h"
 #include "Mesh.h"
 
+AActor::AActor()
+{
+}
+
 AActor::AActor(
 	AMesh* MeshToSet, 
 	ATexture* TextureToSet, 
@@ -23,18 +27,37 @@ AActor::AActor(
 	Position(PositionToSet), 
 	ShaderProgram(ShaderProgramToSet) {}
 
-void AActor::Update()
+void AActor::Update(float DeltaTime)
 {
 	GLuint uniformModel = ShaderProgram->GetModelLocation();
 
 	GLuint uniformSpecularIntensity = ShaderProgram->GetSpecularIntensityLocation();
 	GLuint uniformShininess = ShaderProgram->GetShininessLocation();
 
-	glm::mat4 model(1);
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::mat4(1.0f);
 	model = glm::translate(model, Position);
+
+	if (bIsRotating)
+	{
+		RotationFactor += (DeltaTime * 2);
+		model = glm::rotate(model, RotationFactor, glm::vec3(1.f));
+	}
+	else
+	{
+		model = glm::rotate(model, 1.f, RotationVector);
+	}
+
+
+
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 	Texture->UseTexture();
 	Material->UseMaterial(uniformSpecularIntensity, uniformShininess);
 	Mesh->RenderMesh();
+}
+
+void AActor::Rotate(glm::vec3 RotationVectorToSet)
+{
+	RotationVector = RotationVectorToSet;
 }

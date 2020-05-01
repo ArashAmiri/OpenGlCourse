@@ -28,7 +28,7 @@
 
 std::vector<AMesh*> MeshList;
 std::vector<FShaderProgram*> ShaderProgramList;
-std::vector<AActor*> Actors;
+
 
 APlayerController* PlayerController;
 
@@ -133,6 +133,8 @@ void CreateShaders()
 
 int main()
 {
+	std::vector<AActor*> Actors;
+
 	MainWindow.initialize();
 
 	CreateObjects();
@@ -148,20 +150,39 @@ int main()
 	ShinyMaterial = AMaterial(1.0f, 32.f);
 	DullMaterial = AMaterial(0.3f, 4.f);
 
-	glm::vec3 Loc1 = { 0.f, 3.f, 3.f };
-
-	glm::vec3 Loc2 = { 3.f, 3.f, 3.f };
-
-	glm::vec3 Loc3 = { 6.f, 3.f, 3.f };
-
-	AActor* Player = &AActor(MeshList[0], &DirtTexture, &DullMaterial, Loc1, ShaderProgramList[0]);
-
+	AActor* Player = new AActor(MeshList[0], &DirtTexture, &DullMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
+	Player->SetIsRotating(false);
 	Actors.push_back(Player);
-	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, Loc2, ShaderProgramList[0]));
-	Actors.push_back(&AActor(MeshList[1], &BrickTexture, &ShinyMaterial, Loc3, ShaderProgramList[0]));
+
+
+	float x, y, z;
+	x = 0.f;
+	y = 0.f;
+	z = 0.f;
+
+	for (int i = 0; i < 6000; i++)
+	{
+		x += 1.5f;
+		AActor *Actor = new AActor(MeshList[1], &BrickTexture, &ShinyMaterial, { x, y, z }, ShaderProgramList[0]);
+		Actors.push_back(Actor);
+		if (i % 36 == 0)
+		{
+			x = 0.f;
+			y += 1.5f;
+		}
+		if (i % 36 == 0)
+		{
+			z += 1.5f;
+			x = 0.f;
+			y = 0.f;			
+		}
+	}
+
 
 	PlayerController = &APlayerController();
 	PlayerController->SetControlledActor(*Player);
+
+	Player->Update(DeltaTime);
 
 	MainLight = Light(1.f, 1.0f, 1.0f, 0.2f, 
 		2.0f, -1.f, -2.f, 0.3f);
@@ -216,9 +237,9 @@ int main()
 		
 		
 
-		for (AActor* Actor : Actors)
+		for (auto Actor : Actors)
 		{
-			Actor->Update();
+			Actor->Update(DeltaTime);
 		}
 
 		PlayerController->HandleUserInput(MainWindow.GetKeys(), DeltaTime, Camera);
@@ -229,6 +250,7 @@ int main()
 
 		MainWindow.swapBuffers();
 	}
+
 
 	return 0;
 
