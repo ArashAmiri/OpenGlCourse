@@ -15,10 +15,10 @@ ADirectionalLight::ADirectionalLight(
 {}
 
 void ADirectionalLight::UseLight(
-	GLfloat ambientIntensityLocation,
-	GLfloat ambientColorLocation,
-	GLfloat diffuseIntensityLocation,
-	GLfloat directionLocation
+	GLuint ambientIntensityLocation,
+	GLuint ambientColorLocation,
+	GLuint diffuseIntensityLocation,
+	GLuint directionLocation
 )
 {
 	ALight::UseLight(ambientIntensityLocation, ambientColorLocation, diffuseIntensityLocation);

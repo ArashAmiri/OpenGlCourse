@@ -4,7 +4,7 @@
 
 #include "Light.h"
 
-class APointLight : ALight
+class APointLight : public ALight
 {
 public:
 
@@ -22,19 +22,20 @@ public:
 		GLfloat Exponent
 		);
 
-	~APointLight();
-
 	void UseLight(
-		GLfloat ambientIntensityLocation,
-		GLfloat ambientColorLocation,
-		GLfloat diffuseIntensityLocation,
-		GLfloat PositionLocation,
-		GLfloat ConstantLocation,
-		GLfloat LinearLocation,
-		GLfloat ExponentLocation
+		GLuint ambientIntensityLocation,
+		GLuint ambientColorLocation,
+		GLuint diffuseIntensityLocation,
+		GLuint PositionLocation,
+		GLuint ConstantLocation,
+		GLuint LinearLocation,
+		GLuint ExponentLocation
 	);
 
-private:
+	~APointLight();
+
+
+protected:
 
 	glm::vec3 Position;
 	GLfloat Constant, Linear, Exponent;

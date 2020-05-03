@@ -11,6 +11,7 @@
 
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 
 #include "CommonValues.h"
 
@@ -22,6 +23,7 @@ public:
 
     void SetDirectionalLight(ADirectionalLight* DirectionalLightToSet);
     void SetPointLight(APointLight* PointLightToSet, unsigned int LightCount);
+    void SetSpotLight(ASpotLight* SpotLightToSet, unsigned int LightCount);
 
     void CreateFromString(const char* vertexCode, const char* fragmentCode);
 
@@ -47,7 +49,7 @@ public:
 private:
 
     int PointLightCount = 0;
-
+    int SpotLightCount = 0;
 
     GLuint
         shaderProgramID = 0,
@@ -57,28 +59,26 @@ private:
         uniformEyePosition = 0,
         uniformSpeculaIntensity = 0,
         uniformShininess = 0,
-        UniformPointLightCount = 0;
+        UniformPointLightCount = 0,
+        UniformSpotLightCount = 0;
 
-
-
-    struct {
+    struct LightUniformContainer {
         GLuint UniformColor;
         GLuint UniformAmbientIntensity;
         GLuint UniformDiffuseIntensity;
         GLuint UniformDirection;    
     } UniformDirectionalLight;
     
-    struct {
-        GLuint UniformColor;
-        GLuint UniformAmbientIntensity;
-        GLuint UniformDiffuseIntensity;
-    
+    struct PointLightUniformContainer : LightUniformContainer {    
         GLuint UniformPosition;
         GLuint UniformExponent;
         GLuint UniformLinear;
         GLuint UniformConstant;
-
     } UniformPointLight[MAX_POINT_LIGHTS];
+
+    struct SpotLightUniformContainer : PointLightUniformContainer {
+        GLuint UniformEdge;
+    } UniformSpotLight[MAX_SPOT_LIGHTS];
 
     mutable std::unordered_map<std::string, GLuint> UniformCache;
 
@@ -87,8 +87,6 @@ private:
     std::string ReadFile(const char* fileLocation);
     
     GLuint GetUniformByCache(std::string Name) const;
-
-
 
 };
 

@@ -48,6 +48,7 @@ APointLight PointLights[MAX_POINT_LIGHTS];
 
 ATexture BrickTexture;
 ATexture DirtTexture;
+ATexture PlainTexture;
 
 AMaterial ShinyMaterial;
 AMaterial DullMaterial;
@@ -104,14 +105,14 @@ APlayerController* GetGlobalPlayerController() { return PlayerController; }
 
 void CreateObjects()
 {
-	unsigned int indices[] = {
+	unsigned int PyramidIndices[] = {
 		0, 3, 1,
 		1, 3, 2,
 		2, 3, 0,
 		0, 1, 2
 	};
 
-	GLfloat vertices[] = {
+	GLfloat PyramidVertices[] = {
 		//x    y    z      u     v      nx   ny   nz
 		-1.f, -1.f, -0.6f, 0.0f, 2.0f,  0.f, 0.f, 0.f,
 		 0.f, -1.f, 1.f,   0.0f, 1.0f,  0.f, 0.f, 0.f,
@@ -119,15 +120,31 @@ void CreateObjects()
 		 0.f,  1.f, 0.f,   1.0f, 2.0f,	0.f, 0.f, 0.f
 	};
 
-	calcAverageNormals(indices, 12, vertices, 32, 8, 5);
+	unsigned int FloorIndices[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	GLfloat FloorVertices[] = {
+		-10.f, 0.f, -10.f, 0.0f, 0.0f, 0.f, -1.f, 0.f,
+		10.f, 0.f, -10.f,  10.0f, 0.0f, 0.f, -1.f, 0.f,
+		10.f, 0.f, 10.f,   0.0f, 10.0f, 0.f, -1.f, 0.f,
+		-10.f, 0.f, 10.f,  10.0f, 10.0f, 0.f, -1.f, 0.f
+	};
+
+	calcAverageNormals(PyramidIndices, 12, PyramidVertices, 32, 8, 5);
 
 	AMesh *Mesh1 = new AMesh();
-	Mesh1->CreateMesh(vertices, indices, 32, 12);
+	Mesh1->CreateMesh(PyramidVertices, PyramidIndices, 32, 12);
 	MeshList.push_back(Mesh1);
 
 	AMesh* Mesh2 = new AMesh();
-	Mesh2->CreateMesh(vertices, indices, 32, 12);
+	Mesh2->CreateMesh(PyramidVertices, PyramidIndices, 32, 12);
 	MeshList.push_back(Mesh2);
+
+	AMesh* FloorMesh = new AMesh();
+	FloorMesh->CreateMesh(FloorVertices, FloorIndices, 32, 6);
+	MeshList.push_back(FloorMesh);
 }
 
 void CreateShaders()
@@ -153,19 +170,26 @@ int main()
 	DirtTexture = ATexture((char*)"Textures/dirt.png");
 	DirtTexture.LoadTexture();
 
-	ShinyMaterial = AMaterial(1.0f, 32.f);
+	PlainTexture = ATexture((char*)"Textures/plain.png");
+	PlainTexture.LoadTexture();
+
+	ShinyMaterial = AMaterial(0.5f, 10.0f);
 	DullMaterial = AMaterial(0.3f, 4.f);
 
-	AActor* Player = new AActor(MeshList[0], &DirtTexture, &DullMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
+
+	AActor* Player = new AActor(MeshList[0], &BrickTexture, &ShinyMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
 	Player->SetIsRotating(false);
 	Actors.push_back(Player);
 
+	AActor* Floor = new AActor(MeshList[2], &PlainTexture, &ShinyMaterial, { 0.f, -2.f, 0.f }, ShaderProgramList[0]);
+	Actors.push_back(Floor);
 
 	float x, y, z;
 	x = 0.f;
 	y = 0.f;
 	z = 0.f;
 
+	/*
 	for (int i = 0; i < 6000; i++)
 	{
 		x += 1.5f;
@@ -183,6 +207,7 @@ int main()
 			y = 0.f;			
 		}
 	}
+	*/
 
 
 	PlayerController = &APlayerController();
@@ -190,9 +215,28 @@ int main()
 
 	Player->Update(DeltaTime);
 
-	MainLight = ADirectionalLight( 1.f, 1.0f, 1.0f, 0.2f, 0.3f, 2.0f, -1.f, -2.f );
+	MainLight = ADirectionalLight( 
+		1.f, 1.0f, 1.0f, 
+		0.2f, 0.2f, 
+		2.0f, -1.f, -2.f );
 
-	//PointLights[0] = APointLight( 0.f, 1.f, 0.f, 1.f, 1.f, -4.f, 0.f, 0.f, 0.f, 0.f, 0.f );
+	unsigned int PointLightCount = 0;
+
+	PointLights[0] = APointLight( 
+		0.f, 0.f, 1.f, 
+		0.0f, 1.f, 
+		-4.f, 0.f, 0.f, 
+		0.3f, 0.1f, 0.01f);
+
+	PointLightCount++;
+
+	PointLights[1] = APointLight( 
+		0.f, 1.f, 0.f, 
+		0.0f, 1.f, 
+		4.f, 0.f, 0.f, 
+		0.3f, 0.1f, 0.01f);
+
+	PointLightCount++;
 
 	GLuint uniformModel = 0, 
 		uniformProjection = 0, 
@@ -220,7 +264,7 @@ int main()
 
 		//Camera.SetPosition(Player->GetPosition() + glm::vec3(-4.0f, 0.f, 0.f));
 
-		GraphicsLayer::ClearScreen(glm::vec4(0.2f, 0.2f, 0.2f, 1.f));
+		GraphicsLayer::ClearScreen(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
 
 		ShaderProgramList[0]->UseShader();
 
@@ -232,6 +276,7 @@ int main()
 		uniformShininess = ShaderProgramList[0]->GetShininessLocation();
 		
 		ShaderProgramList[0]->SetDirectionalLight(&MainLight);
+		ShaderProgramList[0]->SetPointLight(PointLights, PointLightCount);
 
 		GraphicsLayer::PassUniforms(uniformProjection, uniformView, uniformEyePosition, projection, Camera);
 

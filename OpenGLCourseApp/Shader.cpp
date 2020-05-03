@@ -10,7 +10,7 @@ FShaderProgram::FShaderProgram()
 		= uniformModel 
 		= uniformView 
 		= UniformDirectionalLight.UniformAmbientIntensity 
-		= UniformDirectionalLight.UniformColor 
+		= UniformDirectionalLight.UniformColor
 		= 0;
 }
 
@@ -47,6 +47,30 @@ void FShaderProgram::SetPointLight(APointLight* PointLightToSet, unsigned int Li
 	}
 }
 
+void FShaderProgram::SetSpotLight(ASpotLight* SpotLightToSet, unsigned int LightCount)
+{
+	if (LightCount > MAX_SPOT_LIGHTS)
+	{
+		LightCount = MAX_SPOT_LIGHTS;
+	}
+
+	glUniform1i(UniformSpotLightCount, LightCount);
+
+	for (size_t i = 0; i < LightCount; i++)
+	{
+		SpotLightToSet[i].UseLight(
+			UniformSpotLight[i].UniformAmbientIntensity, 
+			UniformSpotLight[i].UniformColor, 
+			UniformSpotLight[i].UniformDiffuseIntensity, 
+			UniformSpotLight[i].UniformPosition, 
+			UniformSpotLight[i].UniformDirection, 
+			UniformSpotLight[i].UniformConstant, 
+			UniformSpotLight[i].UniformLinear, 
+			UniformSpotLight[i].UniformExponent, 
+			UniformSpotLight[i].UniformEdge
+		);
+	}
+}
 
 void FShaderProgram::CreateFromString(const char* vertexCode, const char* fragmentCode)
 {
@@ -128,29 +152,61 @@ void FShaderProgram::CompileShader(const char* vertexCode, const char* fragmentC
 	for (size_t i = 0; i < MAX_POINT_LIGHTS; ++i)
 	{
 		char locBuff[100] = { '\0' };
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].base.color", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.color", i);
 		UniformPointLight[i].UniformColor = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].base.ambientIntensity", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.ambientIntensity", i);
 		UniformPointLight[i].UniformAmbientIntensity = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].base.diffuseIntensity", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].base.diffuseIntensity", i);
 		UniformPointLight[i].UniformDiffuseIntensity = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].uniformPosition", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].position", i);
 		UniformPointLight[i].UniformPosition = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].uniformConstant", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].constant", i);
 		UniformPointLight[i].UniformConstant = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].uniformLinear", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].linear", i);
 		UniformPointLight[i].UniformLinear = GetUniformByCache(locBuff);
 
-		snprintf(locBuff, sizeof(locBuff), "pointLight[%d].uniformExponent", i);
+		snprintf(locBuff, sizeof(locBuff), "pointLights[%d].exponent", i);
 		UniformPointLight[i].UniformExponent = GetUniformByCache(locBuff);
-	}
-	
+	}	
 
+	
+	for (size_t i = 0; i < MAX_SPOT_LIGHTS; ++i)
+	{
+		char locBuff[100] = { '\0' };
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.base.color", i);
+		UniformSpotLight[i].UniformColor = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.base.ambientIntensity", i);
+		UniformSpotLight[i].UniformAmbientIntensity = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.base.diffuseIntensity", i);
+		UniformSpotLight[i].UniformDiffuseIntensity = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.position", i);
+		UniformSpotLight[i].UniformPosition = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.constant", i);
+		UniformSpotLight[i].UniformConstant = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.linear", i);
+		UniformSpotLight[i].UniformLinear = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].base.exponent", i);
+		UniformSpotLight[i].UniformExponent = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].direction", i);
+		UniformSpotLight[i].UniformDirection = GetUniformByCache(locBuff);
+
+		snprintf(locBuff, sizeof(locBuff), "spotLights[%d].edge", i);
+		UniformSpotLight[i].UniformEdge = GetUniformByCache(locBuff);
+
+	}
+	 
 	uniformSpeculaIntensity = GetUniformByCache("material.specularIntensity");
 	uniformShininess = GetUniformByCache("material.shininess");
 	uniformEyePosition = GetUniformByCache("eyePosition");
@@ -229,8 +285,4 @@ GLuint FShaderProgram::GetUniformByCache(std::string UniformName) const
 		return UniformFromGPU;
 	}
 	return GLuint();
-}
-
-void SetDirectionalLight(ADirectionalLight* DirectionalLightToSet)
-{
 }
