@@ -19,6 +19,7 @@
 
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 
 #include "Material.h"
 #include "Transform.h"
@@ -45,6 +46,7 @@ ACamera Camera;
 
 ADirectionalLight MainLight;
 APointLight PointLights[MAX_POINT_LIGHTS];
+ASpotLight SpotLights[MAX_SPOT_LIGHTS];
 
 ATexture BrickTexture;
 ATexture DirtTexture;
@@ -126,10 +128,10 @@ void CreateObjects()
 	};
 
 	GLfloat FloorVertices[] = {
-		-10.f, 0.f, -10.f, 0.0f, 0.0f, 0.f, -1.f, 0.f,
-		10.f, 0.f, -10.f,  10.0f, 0.0f, 0.f, -1.f, 0.f,
-		10.f, 0.f, 10.f,   0.0f, 10.0f, 0.f, -1.f, 0.f,
-		-10.f, 0.f, 10.f,  10.0f, 10.0f, 0.f, -1.f, 0.f
+		-100.f, 0.f, -100.f, 0.0f, 0.0f, 0.f, -1.f, 0.f,
+		100.f, 0.f, -100.f,  100.0f, 0.0f, 0.f, -1.f, 0.f,
+		100.f, 0.f, 100.f,   0.0f, 100.0f, 0.f, -1.f, 0.f,
+		-100.f, 0.f, 100.f,  100.0f, 100.0f, 0.f, -1.f, 0.f
 	};
 
 	calcAverageNormals(PyramidIndices, 12, PyramidVertices, 32, 8, 5);
@@ -217,14 +219,15 @@ int main()
 
 	MainLight = ADirectionalLight( 
 		1.f, 1.0f, 1.0f, 
-		0.2f, 0.2f, 
+		0.0f, 0.0f, 
 		2.0f, -1.f, -2.f );
 
+	
 	unsigned int PointLightCount = 0;
-
+	
 	PointLights[0] = APointLight( 
 		0.f, 0.f, 1.f, 
-		0.0f, 1.f, 
+		0.0f, 0.1f, 
 		-4.f, 0.f, 0.f, 
 		0.3f, 0.1f, 0.01f);
 
@@ -232,11 +235,34 @@ int main()
 
 	PointLights[1] = APointLight( 
 		0.f, 1.f, 0.f, 
-		0.0f, 1.f, 
+		0.0f, 0.1f, 
 		4.f, 0.f, 0.f, 
 		0.3f, 0.1f, 0.01f);
 
 	PointLightCount++;
+	
+	unsigned int SpotLightCount = 0;
+
+	SpotLights[0] = ASpotLight(
+		1.f, 0.f, 0.f,
+		2.f, 2.f,
+		0.f, 1.f, 0.f,
+		0.f, -1.f, 0.f,
+		1.f, 1.f, 1.f,
+	    20.f);
+
+	SpotLightCount++;
+
+	SpotLights[1] = ASpotLight(
+		1.f, 1.f, 0.f,
+		40.f, 2.f,
+		3.f, 7.f, 3.f,
+		0.f, -1.f, 0.f,
+		1.f, 1.f, 1.f,
+	    25.f);
+
+	SpotLightCount++;
+
 
 	GLuint uniformModel = 0, 
 		uniformProjection = 0, 
@@ -277,6 +303,9 @@ int main()
 		
 		ShaderProgramList[0]->SetDirectionalLight(&MainLight);
 		ShaderProgramList[0]->SetPointLight(PointLights, PointLightCount);
+		ShaderProgramList[0]->SetSpotLight(SpotLights, SpotLightCount);
+
+		SpotLights[1].SetFlash(Camera.GetPosition(), Camera.GetFront());
 
 		GraphicsLayer::PassUniforms(uniformProjection, uniformView, uniformEyePosition, projection, Camera);
 

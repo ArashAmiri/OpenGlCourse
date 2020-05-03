@@ -23,7 +23,7 @@ ASpotLight::ASpotLight(
 		AmbientIntensity, DIntensity,
 		XPos, YPos, ZPos,
 		ConstantToSet, Linear, Exponent)
-	, Direction(glm::vec3(XDir, YDir, ZDir)) 
+	, Direction(glm::normalize(glm::vec3(XDir, YDir, ZDir))) 
 	, Edge(Edge)
 {
 	ProcessedEdge = cosf(glm::radians(Edge));

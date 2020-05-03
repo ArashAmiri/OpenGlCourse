@@ -102,6 +102,23 @@ vec4 CalcPointLight(PointLight pointLight)
 	return (color / attenuation);	
 }
 
+vec4 CalcSpotLight(SpotLight spotLight)
+{
+	vec3 rayDirection = normalize(FragPos - spotLight.base.position);
+	float spotLightFactor = dot(rayDirection, spotLight.direction);
+	
+	if (spotLightFactor > spotLight.edge)
+	{
+		vec4 color = CalcPointLight(spotLight.base);
+		
+		color = color * (1.0f - (1.0f - spotLightFactor) * (1.0f / (1.0f - spotLight.edge)));
+		
+		return color;
+	} else {
+		return vec4(0,0,0,0);
+	}
+}
+
 vec4 CalcPointLights()
 {
     vec4 totalColor = vec4(0,0,0,0);
@@ -113,9 +130,19 @@ vec4 CalcPointLights()
 	return totalColor;
 }
 
+vec4 CalcSpotLights()
+{
+    vec4 totalColor = vec4(0,0,0,0);
+	for (int i=0; i < spotLightCount; i++)
+	{
+		totalColor += CalcSpotLight(spotLights[i]);
+	}
+	return totalColor;
+}
+
 void main()												
 {
 	vec4 finalColor = CalcDirectionalLight();
-	finalColor += CalcPointLights();
+	finalColor += CalcPointLights() + CalcSpotLights();
 	color = texture(theTexture, TexCoord) * finalColor;
 }

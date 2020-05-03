@@ -147,6 +147,7 @@ void FShaderProgram::CompileShader(const char* vertexCode, const char* fragmentC
 	UniformDirectionalLight.UniformDirection = GetUniformByCache("directionLight.direction");
 
 	UniformPointLightCount = GetUniformByCache("pointLightCount");
+	UniformSpotLightCount = GetUniformByCache("spotLightCount");
 
 	
 	for (size_t i = 0; i < MAX_POINT_LIGHTS; ++i)

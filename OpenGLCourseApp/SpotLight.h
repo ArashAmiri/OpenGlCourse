@@ -28,6 +28,8 @@ public:
 		GLuint EdgeLocation
 	);
 
+	inline void SetFlash(glm::vec3 PositionToSet, glm::vec3 DirectionToSet) { Position = PositionToSet; Direction = DirectionToSet; }
+
 	~ASpotLight();
 
 private:

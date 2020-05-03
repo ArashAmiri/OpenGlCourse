@@ -8,7 +8,7 @@ private:
 
 	class AActor *ControlledActor;
 
-	float MovementSpeed = 20.f;
+	float MovementSpeed = 4.f;
 
 public:
 
