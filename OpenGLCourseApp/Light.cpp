@@ -1,40 +1,31 @@
 #include "Light.h"
 
-Light::Light()
-{
-	color = glm::vec3(1.f, 1.f, 1.f);
-	ambientIntensity = 1.f;
+ALight::ALight()
+	: Color(glm::vec3(1.f, 1.f, 1.f))
+	, AmbientIntensity(1.f)
+	, DiffuseIntensity(0.f)
+{}
 
-	direction = glm::vec3(0.f, -1.f, 0.f);
-	diffuseIntensity = 0.f;
-}
-
-Light::Light(
+ALight::ALight(
 	GLfloat red, GLfloat green, GLfloat blue,
-	GLfloat ambientIntensity,
-	GLfloat xDir, GLfloat yDir, GLfloat zDir,
-	GLfloat dIntensity)
-{
-	color = glm::vec3(red, green, blue);
-	this->ambientIntensity = ambientIntensity;
-	direction = glm::vec3(xDir, yDir, zDir);
-	diffuseIntensity = dIntensity;
-}
+	GLfloat AmbientIntensityToSet,
+	GLfloat DIntensity) 
+	: AmbientIntensity(AmbientIntensityToSet)
+	, DiffuseIntensity(DIntensity)
+	, Color(glm::vec3(red, green, blue))
+{}
 
-void Light::UseLight(
+void ALight::UseLight(
 	GLfloat ambientIntensityLocation, 
 	GLfloat ambientColorLocation,
-	GLfloat diffuseIntensityLocation,
-	GLfloat directionLocation
+	GLfloat diffuseIntensityLocation
 	)
 {
-	glUniform3f(ambientColorLocation, color.x, color.y, color.z);
-	glUniform1f(ambientIntensityLocation, ambientIntensity);
-
-	glUniform1f(diffuseIntensityLocation, diffuseIntensity);
-	glUniform3f(directionLocation, direction.x, direction.y, direction.z);
+	glUniform3f(ambientColorLocation, Color.x, Color.y, Color.z);
+	glUniform1f(ambientIntensityLocation, AmbientIntensity);
+	glUniform1f(diffuseIntensityLocation, DiffuseIntensity);
 }
 
-Light::~Light()
+ALight::~ALight()
 {
 }

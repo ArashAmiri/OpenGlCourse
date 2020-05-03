@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.h"
 #include "Texture.h"
@@ -29,8 +28,6 @@ AActor::AActor(
 
 void AActor::Update(float DeltaTime)
 {
-	GLuint uniformModel = ShaderProgram->GetModelLocation();
-
 	GLuint uniformSpecularIntensity = ShaderProgram->GetSpecularIntensityLocation();
 	GLuint uniformShininess = ShaderProgram->GetShininessLocation();
 
@@ -40,17 +37,15 @@ void AActor::Update(float DeltaTime)
 
 	if (bIsRotating)
 	{
-		RotationFactor += (DeltaTime * 2);
-		model = glm::rotate(model, RotationFactor, glm::vec3(1.f));
+		//RotationFactor += (DeltaTime * 2);
+		//model = glm::rotate(model, RotationFactor, glm::vec3(1.f));
 	}
 	else
 	{
 		model = glm::rotate(model, 1.f, RotationVector);
 	}
 
-
-
-	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+	ShaderProgram->UpadeModelUniform(model);
 
 	Texture->UseTexture();
 	Material->UseMaterial(uniformSpecularIntensity, uniformShininess);

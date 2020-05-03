@@ -160,6 +160,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="GraphicsLayer.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="PlayerController.cpp" />
@@ -176,6 +178,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="CommonValues.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="GraphicsLayer.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="PlayerController.h" />

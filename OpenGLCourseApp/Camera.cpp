@@ -85,7 +85,7 @@ void ACamera::Update()
 	APlayerController* GlobalPlayerController = GetGlobalPlayerController();
 	if (GlobalPlayerController)
 	{
-		auto Player = GlobalPlayerController->GetControlledActor();
+		AActor* Player = GlobalPlayerController->GetControlledActor();
 		if (Player)
 		{
 			Position = Player->GetPosition() - (Front * 6.f);

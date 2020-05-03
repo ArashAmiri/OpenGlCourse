@@ -16,7 +16,10 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Texture.h"
-#include "Light.h"
+
+#include "DirectionalLight.h"
+#include "PointLight.h"
+
 #include "Material.h"
 #include "Transform.h"
 #include "Pawn.h"
@@ -25,6 +28,8 @@
 #include "OpenGLCourseApp.h"
 
 #include "GraphicsLayer.h"	
+
+#include "CommonValues.h"
 
 std::vector<AMesh*> MeshList;
 std::vector<FShaderProgram*> ShaderProgramList;
@@ -38,7 +43,8 @@ APawn* Player;
 
 ACamera Camera;
 
-Light MainLight;
+ADirectionalLight MainLight;
+APointLight PointLights[MAX_POINT_LIGHTS];
 
 ATexture BrickTexture;
 ATexture DirtTexture;
@@ -184,16 +190,16 @@ int main()
 
 	Player->Update(DeltaTime);
 
-	MainLight = Light(1.f, 1.0f, 1.0f, 0.2f, 
-		2.0f, -1.f, -2.f, 0.3f);
+	MainLight = ADirectionalLight( 1.f, 1.0f, 1.0f, 0.2f, 0.3f, 2.0f, -1.f, -2.f );
 
-	GLuint uniformModel, uniformProjection, uniformView, 
-		uniformAmbientColor, uniformAmbientIntensity,
-		uniformDirection, uniformDiffuseIntensity,
-		uniformEyePosition,
-		uniformSpecularIntensity,
-		uniformShininess
-		= 0;
+	//PointLights[0] = APointLight( 0.f, 1.f, 0.f, 1.f, 1.f, -4.f, 0.f, 0.f, 0.f, 0.f, 0.f );
+
+	GLuint uniformModel = 0, 
+		uniformProjection = 0, 
+		uniformView = 0, 
+		uniformEyePosition = 0,
+		uniformSpecularIntensity = 0,
+		uniformShininess = 0;
 
 	glm::mat4 projection = glm::perspective(45.f, GLfloat(MainWindow.getBufferWidth()) / GLfloat(MainWindow.getBufferHeight()), .1f, 100.f);
 
@@ -221,15 +227,11 @@ int main()
 		uniformModel = ShaderProgramList[0]->GetModelLocation();
 		uniformProjection = ShaderProgramList[0]->GetProjectionLocation();
 		uniformView = ShaderProgramList[0]->GetViewLocation();
-		uniformAmbientColor = ShaderProgramList[0]->GetAmbientColorLocation();
-		uniformAmbientIntensity = ShaderProgramList[0]->GetAmbientIntensityLocation();
-		uniformDirection = ShaderProgramList[0]->GetDirectionLocation();
-		uniformDiffuseIntensity = ShaderProgramList[0]->GetDiffuseIntensityLocation();
 		uniformEyePosition = ShaderProgramList[0]->GetEyePositionLocation();
 		uniformSpecularIntensity = ShaderProgramList[0]->GetSpecularIntensityLocation();
 		uniformShininess = ShaderProgramList[0]->GetShininessLocation();
 		
-		MainLight.UseLight(uniformAmbientIntensity, uniformAmbientColor, uniformDiffuseIntensity, uniformDirection);
+		ShaderProgramList[0]->SetDirectionalLight(&MainLight);
 
 		GraphicsLayer::PassUniforms(uniformProjection, uniformView, uniformEyePosition, projection, Camera);
 
