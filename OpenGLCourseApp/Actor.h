@@ -5,21 +5,21 @@
 #include <vector>
 #include <string>
 
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp\postprocess.h>
 #include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-
-
 
 class AActor
 {
 
 private:
 
-	AMaterial* Material;
 	std::vector<class AMesh*> MeshList;
 	std::vector<class ATexture*> TextureList;
 	std::vector<unsigned int> MeshToText;
+
+	std::string Name = "DefaultName";
 
 protected:
 
@@ -36,7 +36,7 @@ protected:
 
 public:
 
-	AActor(class AMaterial *MaterialToSet, glm::vec3 Position, FShaderProgram* ShaderProgram);
+	AActor(std::string Name, class AMaterial *MaterialToSet, glm::vec3 Position, FShaderProgram* ShaderProgram);
 
 	inline void UpdatePosition(glm::vec3 PositionToSet) { Position = PositionToSet; }
 
@@ -46,7 +46,6 @@ public:
 	void Update(float DeltaTime); //RenderModel
 	void ClearModel();
 	void Rotate(glm::vec3 Rotation);
-	inline void SetIsRotating(bool IsRotating) { bIsRotating = IsRotating; }
 
 private:
 

@@ -179,42 +179,20 @@ int main()
 	DullMaterial = AMaterial(0.3f, 4.f);
 
 
-	AActor* Player = new AActor(MeshList[0], &BrickTexture, &ShinyMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
-	Player->SetIsRotating(false);
+	AActor* Player = new AActor("XWing", &ShinyMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
+	Player->LoadModel("Models/xwingsmall.obj");
 	Actors.push_back(Player);
 
-	AActor* Floor = new AActor(MeshList[2], &PlainTexture, &ShinyMaterial, { 0.f, -2.f, 0.f }, ShaderProgramList[0]);
-	Actors.push_back(Floor);
+	//AActor* Floor = new AActor(&ShinyMaterial, { 0.f, -2.f, 0.f }, ShaderProgramList[0]);
+	//Actors.push_back(Floor);
 
 	float x, y, z;
 	x = 0.f;
 	y = 0.f;
 	z = 0.f;
 
-	/*
-	for (int i = 0; i < 6000; i++)
-	{
-		x += 1.5f;
-		AActor *Actor = new AActor(MeshList[1], &BrickTexture, &ShinyMaterial, { x, y, z }, ShaderProgramList[0]);
-		Actors.push_back(Actor);
-		if (i % 36 == 0)
-		{
-			x = 0.f;
-			y += 1.5f;
-		}
-		if (i % 36 == 0)
-		{
-			z += 1.5f;
-			x = 0.f;
-			y = 0.f;			
-		}
-	}
-	*/
-
-
 	PlayerController = &APlayerController();
 	PlayerController->SetControlledActor(*Player);
-
 	Player->Update(DeltaTime);
 
 	MainLight = ADirectionalLight( 

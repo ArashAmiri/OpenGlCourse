@@ -95,8 +95,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -112,8 +112,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

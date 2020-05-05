@@ -12,28 +12,34 @@
 #include "Material.h"
 
 AActor::AActor(
+	std::string Name,
 	AMaterial *MaterialToSet,
 	glm::vec3 PositionToSet, 
 	FShaderProgram* ShaderProgramToSet) 
-	: Material(MaterialToSet)
+	: Name(Name)
+	, Material(MaterialToSet)
 	, Position(PositionToSet)
 	, ShaderProgram(ShaderProgramToSet) {}
 
 void AActor::LoadModel(const std::string& Filename)
-{
+{ 
+
 	Assimp::Importer Importer;
+	
 	const aiScene* Scene = Importer.ReadFile(
 		Filename, 
 		aiProcess_Triangulate 
 		| aiProcess_FlipUVs 
 		| aiProcess_GenSmoothNormals 
 		| aiProcess_JoinIdenticalVertices);
-
+	
+	
 	if (!Scene)
 	{
 		printf("%s Model failed to Load %s", Filename, Importer.GetErrorString());
 		return;
 	}
+	
 
 	LoadNode(Scene->mRootNode, Scene);
 	LoadMaterials(Scene);
@@ -47,6 +53,7 @@ void AActor::Update(float DeltaTime)
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, Position);
+	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 
 	for (size_t i = 0; i < MeshList.size(); ++i)
 	{
