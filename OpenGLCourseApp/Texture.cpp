@@ -6,7 +6,7 @@ ATexture::ATexture()
 	fileLocation = (char*)"";
 }
 
-ATexture::ATexture(char* fileLoc)
+ATexture::ATexture(const char* fileLoc)
 {
 	textureID = 0;
 	width = 0;

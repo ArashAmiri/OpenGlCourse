@@ -8,7 +8,7 @@ class ATexture
 public:
 	ATexture();
 	
-	ATexture(char* fileLoc);
+	ATexture(const char* fileLoc);
 
 	bool LoadTextureWithAlpha();
 	bool LoadTexture();
@@ -22,7 +22,7 @@ private:
 	GLuint textureID;
 	int width, height, bitDepth;
 
-	char* fileLocation;
+	const char* fileLocation;
 
 	bool LoadTexture(bool WithAlpha);
 };
