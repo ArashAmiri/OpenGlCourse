@@ -10,7 +10,9 @@ public:
 	
 	ATexture(char* fileLoc);
 
-	void LoadTexture();
+	bool LoadTextureWithAlpha();
+	bool LoadTexture();
+
 	void UseTexture();
 	void ClearTexture();
 	
@@ -22,5 +24,6 @@ private:
 
 	char* fileLocation;
 
+	bool LoadTexture(bool WithAlpha);
 };
 

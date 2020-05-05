@@ -167,13 +167,13 @@ int main()
 	Camera = ACamera(glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f), -90.f, 0.f, 3.f, .1f);
 
 	BrickTexture = ATexture((char *)"Textures/brick.png");
-	BrickTexture.LoadTexture();
+	BrickTexture.LoadTextureWithAlpha();
 
 	DirtTexture = ATexture((char*)"Textures/dirt.png");
-	DirtTexture.LoadTexture();
+	DirtTexture.LoadTextureWithAlpha();
 
 	PlainTexture = ATexture((char*)"Textures/plain.png");
-	PlainTexture.LoadTexture();
+	PlainTexture.LoadTextureWithAlpha();
 
 	ShinyMaterial = AMaterial(0.5f, 10.0f);
 	DullMaterial = AMaterial(0.3f, 4.f);

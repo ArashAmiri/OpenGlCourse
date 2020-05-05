@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\include;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLM\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\include;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\build32\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLM\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,13 +107,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\include;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLM\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\include;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\build32\include;c:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLM\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLEW\lib\Release\Win32;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\GLFW\lib-vc2019;C:\Users\Arashbella\Documents\Visual Studio 2019\ExternalLibs\ASSIMP\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
