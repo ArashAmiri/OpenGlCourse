@@ -36,11 +36,11 @@ std::vector<AMesh*> MeshList;
 std::vector<FShaderProgram*> ShaderProgramList;
 
 
-APlayerController* PlayerController;
+APlayerController *PlayerController;
 
 Window MainWindow = Window(1366, 768);
 
-APawn* Player;
+APawn *Player;
 
 ACamera Camera;
 
@@ -178,26 +178,30 @@ int main()
 	ShinyMaterial = AMaterial(0.5f, 10.0f);
 	DullMaterial = AMaterial(0.3f, 4.f);
 
-
-	AActor* Player = new AActor("XWing", &ShinyMaterial, { 0.f, 3.f, 3.f }, ShaderProgramList[0]);
+	
+	AActor* Player = new AActor("XWing", &ShinyMaterial, glm::vec3(0.f, 3.0f, 0.f), ShaderProgramList[0]);
 	Player->LoadModel("Models/xwingsmall.obj");
 	Actors.push_back(Player);
+	
 
-	//AActor* Floor = new AActor(&ShinyMaterial, { 0.f, -2.f, 0.f }, ShaderProgramList[0]);
-	//Actors.push_back(Floor);
+	
+	AActor* Floor = new AActor("Destroyer", &ShinyMaterial, glm::vec3( 0.f, -1000.f, 0.f ), ShaderProgramList[0]);
+	Floor->LoadModel("Models/imperial.obj");
+	Actors.push_back(Floor);
+	
+	/*
+	AActor* Floor2 = new AActor("Terrain", &DullMaterial, glm::vec3( 0.f, -2.f, 0.f ), ShaderProgramList[0]);
+	Floor2->LoadModel("Models/terrain.obj");
+	Actors.push_back(Floor2);
+	*/
 
-	float x, y, z;
-	x = 0.f;
-	y = 0.f;
-	z = 0.f;
-
-	PlayerController = &APlayerController();
+	PlayerController = new APlayerController();
 	PlayerController->SetControlledActor(*Player);
-	Player->Update(DeltaTime);
+	//Player->Update(DeltaTime);
 
 	MainLight = ADirectionalLight( 
 		1.f, 1.0f, 1.0f, 
-		0.0f, 0.0f, 
+		0.5f, 0.5f, 
 		2.0f, -1.f, -2.f );
 
 	
@@ -205,7 +209,7 @@ int main()
 	
 	PointLights[0] = APointLight( 
 		0.f, 0.f, 1.f, 
-		0.0f, 0.1f, 
+		10.0f, 0.1f, 
 		-4.f, 0.f, 0.f, 
 		0.3f, 0.1f, 0.01f);
 
@@ -213,9 +217,17 @@ int main()
 
 	PointLights[1] = APointLight( 
 		0.f, 1.f, 0.f, 
-		0.0f, 0.1f, 
-		4.f, 0.f, 0.f, 
+		10.0f, 0.1f, 
+		400.f, 200.f, 0.f, 
 		0.3f, 0.1f, 0.01f);
+
+	PointLightCount++;
+
+	PointLights[2] = APointLight( 
+	0.f, 0.f, 1.f, 
+	10.0f, 0.1f, 
+	12.f, 100.f, 0.f, 
+	0.3f, 0.1f, 0.01f);
 
 	PointLightCount++;
 	
@@ -223,11 +235,11 @@ int main()
 
 	SpotLights[0] = ASpotLight(
 		1.f, 0.f, 0.f,
-		2.f, 2.f,
-		0.f, 1.f, 0.f,
+		20000.f, 2.f,
+		100.f, 10.f, 0.f,
 		0.f, -1.f, 0.f,
 		1.f, 1.f, 1.f,
-	    20.f);
+	    100.f);
 
 	SpotLightCount++;
 
@@ -249,7 +261,7 @@ int main()
 		uniformSpecularIntensity = 0,
 		uniformShininess = 0;
 
-	glm::mat4 projection = glm::perspective(45.f, GLfloat(MainWindow.getBufferWidth()) / GLfloat(MainWindow.getBufferHeight()), .1f, 100.f);
+	glm::mat4 projection = glm::perspective(45.f, GLfloat(MainWindow.getBufferWidth()) / GLfloat(MainWindow.getBufferHeight()), .1f, 10000000.f);
 
 	FTransform Transform = FTransform();
 	
@@ -283,27 +295,26 @@ int main()
 		ShaderProgramList[0]->SetPointLight(PointLights, PointLightCount);
 		ShaderProgramList[0]->SetSpotLight(SpotLights, SpotLightCount);
 
-		SpotLights[1].SetFlash(Camera.GetPosition(), Camera.GetFront());
+		//SpotLights[1].SetFlash(Camera.GetPosition(), Camera.GetFront());
 
 		GraphicsLayer::PassUniforms(uniformProjection, uniformView, uniformEyePosition, projection, Camera);
 
-		//Transform.Location = Camera.GetFront() + Camera.GetPosition();
-		
-		
 
 		for (auto Actor : Actors)
 		{
 			Actor->Update(DeltaTime);
 		}
+		
 
 		PlayerController->HandleUserInput(MainWindow.GetKeys(), DeltaTime, Camera);
-
-		//Camera.SetPosition(PlayerController->GetControlledActor()->GetPosition() - glm::vec3(6.0f, 0.0f, 0.0f));
 		
 		GraphicsLayer::UseShaderProgram(0);
 
 		MainWindow.swapBuffers();
 	}
+
+	delete PlayerController;
+	PlayerController = nullptr;
 
 
 	return 0;

@@ -19,7 +19,6 @@ void APlayerController::HandleUserInput(bool* keys, float DeltaTime, const ACame
 	if (keys[GLFW_KEY_Q]) UpdateFactor = Camera.GetUp();
 	if (keys[GLFW_KEY_E]) UpdateFactor = -Camera.GetUp();
 
-	ControlledActor->UpdatePosition(ControlledActor->GetPosition() + (UpdateFactor * MovementSpeed * DeltaTime));
-	
-	//ControlledActor->Rotate(-Camera.GetRight());
+	ControlledActor->Position = ControlledActor->GetPosition() + (UpdateFactor * MovementSpeed * DeltaTime);
+	ControlledActor->RotationVector = -Camera.GetRight();
 }

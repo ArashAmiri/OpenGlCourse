@@ -85,10 +85,10 @@ void ACamera::Update()
 	APlayerController* GlobalPlayerController = GetGlobalPlayerController();
 	if (GlobalPlayerController)
 	{
-		AActor* Player = GlobalPlayerController->GetControlledActor();
+		const AActor* Player = GlobalPlayerController->GetControlledActor();
 		if (Player)
 		{
-			Position = Player->GetPosition() - (Front * 6.f);
+			Position = Player->GetPosition() - (Front * 12.f);
 		}
 	}
 }

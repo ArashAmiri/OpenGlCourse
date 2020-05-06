@@ -6,14 +6,14 @@ class APlayerController
 {
 private:
 
-	class AActor *ControlledActor;
+	const class AActor *ControlledActor;
 
-	float MovementSpeed = 20.f;
+	float MovementSpeed = 1000.f;
 
 public:
 
-	inline void SetControlledActor(AActor &Actor) { ControlledActor = &Actor; }
-	inline AActor* GetControlledActor() const { return ControlledActor; }
+	inline void SetControlledActor(const AActor &Actor) { ControlledActor = &Actor; }
+	inline const AActor* GetControlledActor() const { return ControlledActor; }
 
 	void HandleUserInput(bool* keys, float DeltaTime, const ACamera &Camera);
 

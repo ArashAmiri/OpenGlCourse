@@ -53,7 +53,8 @@ void AActor::Update(float DeltaTime)
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, Position);
-	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+	//model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+	//model = glm::rotate(model, 1.f, RotationVector);
 
 	for (size_t i = 0; i < MeshList.size(); ++i)
 	{
@@ -63,12 +64,13 @@ void AActor::Update(float DeltaTime)
 		{
 			TextureList[MaterialIndex]->UseTexture();
 		}
-
+	
+		ShaderProgram->UpadeModelUniform(model);
+		Material->UseMaterial(uniformSpecularIntensity, uniformShininess);
 		MeshList[i]->RenderMesh();
 	}
 
-	ShaderProgram->UpadeModelUniform(model);
-	Material->UseMaterial(uniformSpecularIntensity, uniformShininess);
+
 }
 
 void AActor::ClearModel()

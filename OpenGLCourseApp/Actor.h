@@ -24,21 +24,20 @@ private:
 protected:
 
 	class AMaterial* Material;
-	class ATexture* Texture;
 	class FShaderProgram* ShaderProgram;
 
-	glm::vec3 Position;
 	float RotationFactor = 0.0f;
 	glm::vec3 Rotation = glm::vec3(0.0f);
 	float Speed = 0;
 	bool bIsRotating = true;
-	glm::vec3 RotationVector = glm::vec3(0.0f);
 
 public:
+	mutable glm::vec3 Position;
+	mutable glm::vec3 RotationVector = glm::vec3(0.0f);
 
 	AActor(std::string Name, class AMaterial *MaterialToSet, glm::vec3 Position, FShaderProgram* ShaderProgram);
 
-	inline void UpdatePosition(glm::vec3 PositionToSet) { Position = PositionToSet; }
+	//inline void UpdatePosition(glm::vec3 PositionToSet) { Position = PositionToSet; }
 
 	inline glm::vec3 GetPosition() const { return Position; };
 
